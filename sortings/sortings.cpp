@@ -1,110 +1,174 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
-class Sortings
+int mas[9] = { 31, 14, 12, 21, 15, 7, 120, 6, 1 };
+int size = 9;
+
+class Sortings  //здесь 9, 10 и 12 лабы
 {
 public:
-    void bubbleSort(int arr[], int n) //#4
+    //#9
+    //процедура создания двоичной кучи
+    void heapCreation(int arr[], int n, int i)
     {
-        for (int i = 0; i < n - 1; i++)
+        int biggest = i; //индекс корневого узла
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[biggest]) 
         {
-            for (int j = 0; j < n - i - 1; j++)
-            {
-                if (arr[j] > arr[j + 1]) 
-                {
-                    std::swap(arr[j], arr[j + 1]);
-                }
-            }
+            biggest = left;
+        }
+
+        if (right < n && arr[right] > arr[biggest]) 
+        {
+            biggest = right;
+        }
+
+        //проверяем, чтобы самый большой элемент был корнем
+        if (biggest != i) 
+        {
+            std::swap(arr[i], arr[biggest]);
+            heapCreation(arr, n, biggest);  //рекурсия, создаём новую кучу с новым корневым узлом
         }
     }
 
-    void insertSort(int arr[], int n) //#5
+    //сама пирамидальная сортировка (сортировка кучей)
+    void pyramidSort(int arr[], int n)
     {
-        for (int i = 1; i < n; i++)
+        for (int i = n / 2 - 1; i >= 0; i--)
         {
-            int check = arr[i];
-            int j = i - 1; //index of the element to the left
-            while (j >= 0 && arr[j] > check) //as long as left element is bigger
-            {
-                arr[j + 1] = arr[j]; //shifting elements to the right
-                j--;
-            }
-            arr[j + 1] = check;
+            heapCreation(arr, n, i);    //создаём кучу
+        }
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            std::swap(arr[0], arr[i]);  //ставим корень в конец
+            heapCreation(arr, i, 0);    //и тогда создаём кучу поменьше
         }
     }
 
-    void selectSort(int arr[], int n) //#6
+    ///#10
+    //Cортировка слиянием делит большой массив на два меньших подмассива, а затем рекурсивно сортирует подмассивы.
+    //Суть работы алгоритма заключается в том, что он разбивает список на две половины,
+    //сортирует каждую половину отдельно, а затем объединяет их вместе в отсортированный список.
+    //Этот процесс повторяется для каждой половины до тех пор, пока не будет достигнута базовая единица - список из одного элемента.
+    //сложность сортировки O(n log n)
+
+    //Функция для слияния двух отсортированных массивов
+    void merge(int arr[], int l, int r)
     {
-        for (int i = 0; i < n - 1; i++)
+        int m, i, j, k;
+        m = (l + r) / 2;
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        // Создаем временные массивы
+        std::vector<int> L(n1), R(n2);
+        
+        // Копируем данные во временные массивы
+        for (i = 0; i < n1; i++)
+            L[i] = arr[l + i];  //здесь ошибка
+        for (j = 0; j < n2; j++)
+            R[j] = arr[m + 1 + j];
+
+        // Слияние временных массивов обратно в arr[l..r]
+        i = 0; // Индекс первого подмассива
+        j = 0; // Индекс второго подмассива
+        k = l; // Индекс объединенного подмассива
+        while (i < n1, j < n2)
         {
-            int minIndex = i;
-            for (int j = i + 1; j < n; j++)
+            if (L[i] <= R[j])
             {
-                if (arr[j] < arr[minIndex])
-                {
-                    minIndex = j;
-                }
-            }
-            std::swap(arr[i], arr[minIndex]); //position the smallest found element where we began the check
-        }
-    }
-
-    void shellaSort(int arr[], int n) //#7
-    {
-        for (int step = n / 2; step > 0; step /= 2) // Выбираем шаг
-        {
-            for (int i = step; i < n; i++) // Применяем сортировку вставками для каждого сегмента
-            {
-                int check = arr[i];
-                int j;
-                for (j = i; j >= step && arr[j - step] > check; j -= step) // Сравнивем, меняем
-                {
-                    arr[j] = arr[j - step];
-                }
-                arr[j] = check;
-            }
-        }
-    }
-
-    void quickSort(int arr[], int low, int high) //#11
-    {
-        int i = low;
-        int j = high;
-        int pivot = arr[(i + j) / 2];
-        int temp;
-
-        while (i <= j)
-        {
-            while (arr[i] < pivot)
+                arr[k] = L[i];
                 i++;
-            while (arr[j] > pivot)
-                j--;
-            if (i <= j)
-            {
-                std::swap(arr[i], arr[j]);
-                i++;
-                j--;
             }
+            else
+            {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
         }
-        if (j > low)
-            quickSort(arr, low, j);
-        if (i < high)
-            quickSort(arr, i, high);
+        // Копирование оставшихся элементов L[], если они есть
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+        // Копирование оставшихся элементов R[], если они есть
+        while (j < n2)
+        {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+    // Основная функция, которая сортирует arr[l..r] с использованием merge()
+    void mergeSort(int arr[], int l, int r)
+    {
+        if (l < r)
+        {
+            // Найдем среднюю точку
+            int m = l + (r - l) / 2;
+            // Сортируем первую и вторую половины
+            mergeSort(arr, l, m);
+            mergeSort(arr, m + 1, r);
+            // Объединяем отсортированные половины
+            merge(arr, l, r);
+        }
+    }
+
+    //#12
+    //cложность сортировки - O(n log n)
+    void externalSort(int* arr, int size, int chunkSize)
+    {
+        int numberOfChunks = (size + chunkSize - 1) / chunkSize;    //на сколько частей делим массив
+        int* result = new int[size];    //временный массив для отсортированных элементов
+        int* index = new int[numberOfChunks];   //временный массив индексов
+
+        //сортировка каждой части при помощи встроенной сортировки со сложностью O(n log n)
+        for (int i = 0; i < size; i += chunkSize)
+        {
+            std::sort(arr + i, arr + std::min(i + chunkSize, size));
+        }
+
+        //устанавливаем индекс в соответствии с чанками
+        for (int i = 0; i < numberOfChunks; i++)
+        {
+            index[i] = i * chunkSize;
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            int minIndex = -1;
+            for (int j = 0; j < numberOfChunks; j++)
+            {
+                //элемент чанка меньше его границы и его значение меньше значения минимального элемента
+                if (index[j] < (j + 1) * chunkSize && (minIndex == -1 || arr[index[j]] < arr[index[minIndex]]))
+                { 
+                    minIndex = j;   //присваиваем новое значение индексу чанка
+                }
+            }
+            result[i] = arr[index[minIndex]];
+            index[minIndex]++;
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            arr[i] = result[i];
+        }
     }
 };
 
 
 int main()
 {
-    int const size = 6;
-    int mas[size] = { 31, 14, 12, 21, 15 };
-
     Sortings test;
-
-    //test.bubbleSort(mas, size);
-    //test.insertSort(mas, size);
-    //test.selectSort(mas, size);
-    test.shellaSort(mas, size);
-    //test.selectSort(mas, 0, n-1);
+    //test.pyramidSort(mas, size);
+    test.mergeSort(mas, 0, 8);
+    //test.externalSort(mas, size, 2);
 
     std::cout << "Sorted array: \n";
     for (int i = 0; i < size; i++)
