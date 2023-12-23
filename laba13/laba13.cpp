@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <unordered_map>    //библиотека для хеш-таблиц
+#include <unordered_map>    //ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГ  Г¤Г«Гї ГµГҐГё-ГІГ ГЎГ«ГЁГ¶ 
 
-int hashFunction(const std::string& key, int n) //функция, которая создаёт "рандомные" ключи для хеш-таблицы
+int hashFunction(const std::string& key, int n) //ГґГіГ­ГЄГ¶ГЁГї, ГЄГ®ГІГ®Г°Г Гї Г±Г®Г§Г¤Г ВёГІ "Г°Г Г­Г¤Г®Г¬Г­Г»ГҐ" ГЄГ«ГѕГ·ГЁ Г¤Г«Гї ГµГҐГё-ГІГ ГЎГ«ГЁГ¶Г»
 {
     int sum = 0;
     for (int i = 0; i < key.length(); i++)
@@ -15,7 +15,7 @@ int hashFunction(const std::string& key, int n) //функция, которая создаёт "ранд
 
 int countLines(const std::string& key)
 {
-    std::ifstream F(key, std::ios::in); //экземлпяр класса ifstream
+    std::ifstream F(key, std::ios::in); //ГЅГЄГ§ГҐГ¬Г«ГЇГїГ° ГЄГ«Г Г±Г±Г  ifstream
     int count = 0;
     char temp[10000];
 
@@ -37,7 +37,7 @@ int main()
     if (!fin)
     {
         std::cout << "File is not open.";
-        return 1;   //завершаем программу
+        return 1;   //Г§Г ГўГҐГ°ГёГ ГҐГ¬ ГЇГ°Г®ГЈГ°Г Г¬Г¬Гі
     }
 
     std::unordered_map<int, std::string> hashTable;
@@ -45,23 +45,23 @@ int main()
 
     std::string line;
 
-    while (std::getline(fin, line)) //getline позволяет нам считать строку с пробелами
+    while (std::getline(fin, line)) //getline ГЇГ®Г§ГўГ®Г«ГїГҐГІ Г­Г Г¬ Г±Г·ГЁГІГ ГІГј Г±ГІГ°Г®ГЄГі Г± ГЇГ°Г®ГЎГҐГ«Г Г¬ГЁ
     {
         int key = hashFunction(line, n);
         bool fl = true;
         while (fl)
         {
-            if (hashTable[key].empty()) //ищем "свободную" позицию в таблице
+            if (hashTable[key].empty()) //ГЁГ№ГҐГ¬ "Г±ГўГ®ГЎГ®Г¤Г­ГіГѕ" ГЇГ®Г§ГЁГ¶ГЁГѕ Гў ГІГ ГЎГ«ГЁГ¶ГҐ
             {
                 hashTable[key] = line;
                 fl = false;
             }
-            else   //если позиция уже занята
+            else   //ГҐГ±Г«ГЁ ГЇГ®Г§ГЁГ¶ГЁГї ГіГ¦ГҐ Г§Г Г­ГїГІГ 
             {
-                if (key < (n - 1))  //проверяем следующую позицию
+                if (key < (n - 1))  //ГЇГ°Г®ГўГҐГ°ГїГҐГ¬ Г±Г«ГҐГ¤ГіГѕГ№ГіГѕ ГЇГ®Г§ГЁГ¶ГЁГѕ
                     key += 1;
                 else
-                    key = 0;    //но не выходим за пределы возможных ключей
+                    key = 0;    //Г­Г® Г­ГҐ ГўГ»ГµГ®Г¤ГЁГ¬ Г§Г  ГЇГ°ГҐГ¤ГҐГ«Г» ГўГ®Г§Г¬Г®Г¦Г­Г»Гµ ГЄГ«ГѕГ·ГҐГ©
             }
         }
     }
