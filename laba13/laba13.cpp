@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>    //библиотека для хеш-таблиц
 
-int hashFunction(const std::string& key, int n) //функция, которая создаёт "рандомные" ключи для хеш-таблицы
+int hashFunction(const std::string& key, int n) //функция, которая создаёт ключи для хеш-таблицы
 {
     int sum = 0;
     for (int i = 0; i < key.length(); i++)
