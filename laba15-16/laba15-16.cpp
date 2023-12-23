@@ -3,7 +3,7 @@
 #include <string>
 #include <stack>
 
-//8(3(1,6(4,7)),10(,14(13,)))       <- пример
+//8(3(1,6(4,7)),10(,14(13,)))       <- РїСЂРёРјРµСЂ
 
 struct Element
 {
@@ -13,7 +13,7 @@ struct Element
     Element* parent;
 };
 
-Element* treeMaker(int data, Element* root) //создаём элемент бинарного дерева
+Element* treeMaker(int data, Element* root) //СЃРѕР·РґР°С‘Рј СЌР»РµРјРµРЅС‚ Р±РёРЅР°СЂРЅРѕРіРѕ РґРµСЂРµРІР°
 {
     Element* q = new Element;
     q->value = data;
@@ -23,7 +23,7 @@ Element* treeMaker(int data, Element* root) //создаём элемент бинарного дерева
     return q;
 }
 
-void addElement(int data, Element*& root)   //добавляем элемент в дерево
+void addElement(int data, Element*& root)   //РґРѕР±Р°РІР»СЏРµРј СЌР»РµРјРµРЅС‚ РІ РґРµСЂРµРІРѕ
 {
     if (root == nullptr)
     {
@@ -34,10 +34,10 @@ void addElement(int data, Element*& root)   //добавляем элемент в дерево
     Element* r = root;
     while ((data < r->value && r->left != nullptr) || (data > r->value && r->right != nullptr))
     {
-        if (data < r->value)    //если меньше значения - становится левым ребёнком
+        if (data < r->value)    //РµСЃР»Рё РјРµРЅСЊС€Рµ Р·РЅР°С‡РµРЅРёСЏ - СЃС‚Р°РЅРѕРІРёС‚СЃСЏ Р»РµРІС‹Рј СЂРµР±С‘РЅРєРѕРј
             r = r->left;
         else
-            r = r->right;   //если больше значения - становится правым ребёнком
+            r = r->right;   //РµСЃР»Рё Р±РѕР»СЊС€Рµ Р·РЅР°С‡РµРЅРёСЏ - СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РїСЂР°РІС‹Рј СЂРµР±С‘РЅРєРѕРј
     }
     if (data == r->value)
         return;
@@ -59,10 +59,10 @@ void addParenthesis(int data, Element*& root, bool isLeft)
         r->right = t;
 }
 
-void fillTree(std::string& bracketEntry, int& i, Element*& root)    //заполненяем дерево скобочной записью
+void fillTree(std::string& bracketEntry, int& i, Element*& root)    //Р·Р°РїРѕР»РЅРµРЅСЏРµРј РґРµСЂРµРІРѕ СЃРєРѕР±РѕС‡РЅРѕР№ Р·Р°РїРёСЃСЊСЋ
 {
     int value = 0;
-    while (bracketEntry[i] != '\0') //пока не конец строки
+    while (bracketEntry[i] != '\0') //РїРѕРєР° РЅРµ РєРѕРЅРµС† СЃС‚СЂРѕРєРё
     {
         switch (bracketEntry[i])
         {
@@ -111,7 +111,7 @@ void fillTree(std::string& bracketEntry, int& i, Element*& root)    //заполненяе
     }
 }
 
-int depth(int data, Element* v, int k)  //как глубоко элемент находится в дереве
+int depth(int data, Element* v, int k)  //РєР°Рє РіР»СѓР±РѕРєРѕ СЌР»РµРјРµРЅС‚ РЅР°С…РѕРґРёС‚СЃСЏ РІ РґРµСЂРµРІРµ
 {
     if (v == nullptr)
     {
@@ -137,8 +137,8 @@ void clearMemory(Element*& v)
     v = nullptr;
 }
 
-//рекурсивные обходы
-void straightPass(Element* root)    //прямой
+//СЂРµРєСѓСЂСЃРёРІРЅС‹Рµ РѕР±С…РѕРґС‹
+void straightPass(Element* root)    //РїСЂСЏРјРѕР№
 {
     if (root == nullptr)
         return;
@@ -147,7 +147,7 @@ void straightPass(Element* root)    //прямой
     straightPass(root->right);
 }
 
-void centralPass(Element* root)     //центральный
+void centralPass(Element* root)     //С†РµРЅС‚СЂР°Р»СЊРЅС‹Р№
 {
     if (root == nullptr)
         return;
@@ -156,7 +156,7 @@ void centralPass(Element* root)     //центральный
     centralPass(root->right);
 }
 
-void endPass(Element* root)     //концевой
+void endPass(Element* root)     //РєРѕРЅС†РµРІРѕР№
 {
     if (root == nullptr)
         return;
@@ -166,23 +166,23 @@ void endPass(Element* root)     //концевой
 
 }
 
-//нерекурсивный обход
+//РЅРµСЂРµРєСѓСЂСЃРёРІРЅС‹Р№ РѕР±С…РѕРґ
 void nonRecursivePass(Element* root)
 {
     if (root == nullptr)
         return;
     std::stack<Element*> stack;
-    stack.push(root);   //добавляем в стек корень
+    stack.push(root);   //РґРѕР±Р°РІР»СЏРµРј РІ СЃС‚РµРє РєРѕСЂРµРЅСЊ
     while (!stack.empty())
     {
         Element* node = stack.top();
         stack.pop();
         std::cout << node->value << " ";
-        if (node->left != nullptr) //проверяем существования левого поддерева
+        if (node->left != nullptr) //РїСЂРѕРІРµСЂСЏРµРј СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ Р»РµРІРѕРіРѕ РїРѕРґРґРµСЂРµРІР°
         {
             stack.push(node->left);
         }
-        if (node->right != nullptr) //проверяем существования правого поддерева
+        if (node->right != nullptr) //РїСЂРѕРІРµСЂСЏРµРј СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ РїСЂР°РІРѕРіРѕ РїРѕРґРґРµСЂРµРІР°
         {
             stack.push(node->right);
         }
@@ -190,8 +190,8 @@ void nonRecursivePass(Element* root)
 }
 int main()
 {
-    Element* root = nullptr;    //пустое значение корня
-    std::string bracketEntry;   //скобочная запись
+    Element* root = nullptr;    //РїСѓСЃС‚РѕРµ Р·РЅР°С‡РµРЅРёРµ РєРѕСЂРЅСЏ
+    std::string bracketEntry;   //СЃРєРѕР±РѕС‡РЅР°СЏ Р·Р°РїРёСЃСЊ
     std::cout << "Enter bracket-type binary tree entry:\n";
     std::cin >> bracketEntry;
 
