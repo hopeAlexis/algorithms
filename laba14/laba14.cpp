@@ -4,15 +4,15 @@
 #include <list>
 #include <algorithm>
 
-const int n = 20;
+const int n = 5;
 
 class HashTable
 {
 private:
-    int hashFunction(const std::string& word)
+    int hashFunction(const std::string& line)
     {
         int sum = 0;
-        for (char ch : word)
+        for (char ch : line)
         {
             sum += ch;
         }
@@ -23,14 +23,29 @@ private:
 
 public:
     HashTable() : table(n) {}
-    //добавл€ет строку (слово) в хеш-таблицу.
-    void insert(const std::string& word)
+
+    void insert(const std::string& line)
     {
-        int index = hashFunction(word);
-        table[index].push_back(word);
+        int key = hashFunction(line);
+        bool fl = true;
+        while (fl)
+        {
+            if (table[key].empty()) //ищем "свободную" позицию в таблице
+            {
+                table[key].push_back(line);
+                fl = false;
+            }
+            else   //если позици€ уже зан€та
+            {
+                if (key < (n - 1))  //провер€ем следующую позицию
+                    key += 1;
+                else
+                    key = 0;    //но не выходим за пределы возможных ключей
+            }
+        }
     }
 
-    void writeToFile(const std::string& filename)
+    void writeOut(const std::string& filename)
     {
         std::ofstream outputFile(filename);
         if (!outputFile.is_open())
@@ -38,37 +53,39 @@ public:
             std::cerr << "File is not open.";
             return;
         }
+
         for (int i = 0; i < n; ++i)
         {
-            for (const auto& word : table[i])
+            for (const auto& line : table[i])
             {
-                outputFile << i << ": " << word << std::endl;
+                outputFile << i << ": " << line << "\n";
             }
         }
         outputFile.close();
     }
-
-
 };
+
 int main()
 {
     std::string inputFileName = "input.txt";
     std::string outputFileName = "output.txt";
     HashTable hashTable;
     std::ifstream inputFile(inputFileName);
-    if (!inputFile.is_open()) {
+
+    if (!inputFile.is_open()) 
+    {
         std::cerr << "File is not open.";
         return 1;
     }
-    std::string word;
-    while (inputFile >> word)
+
+    std::string line;
+    while (inputFile >> line)
     {
-        word.erase(std::remove_if(word.begin(), word.end(), ::ispunct), word.end()); //удал€ет знаки препинани€ из слова
-        hashTable.insert(word);
+        hashTable.insert(line);
     }
     inputFile.close();
-    // «апись в файл
-    hashTable.writeToFile(outputFileName);
+
+    hashTable.writeOut(outputFileName);
     std::cout << "Hash-table is now in " << outputFileName;
     return 0;
 }
