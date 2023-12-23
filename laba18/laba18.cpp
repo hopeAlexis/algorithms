@@ -23,18 +23,18 @@ Tree* insertElement(Tree* root, int value)
     }
     if (value < root->value) 
     {
-        root->left = insertElement(root->left, value);  //записываем в левого ребёнка, если меньше родителя
+        root->left = insertElement(root->left, value);  //Р·Р°РїРёСЃС‹РІР°РµРј РІ Р»РµРІРѕРіРѕ СЂРµР±С‘РЅРєР°, РµСЃР»Рё РјРµРЅСЊС€Рµ СЂРѕРґРёС‚РµР»СЏ
     }
     else 
     {
-        root->right = insertElement(root->right, value);    //записываем в правого ребёнка, если больше родителя
+        root->right = insertElement(root->right, value);    //Р·Р°РїРёСЃС‹РІР°РµРј РІ РїСЂР°РІРѕРіРѕ СЂРµР±С‘РЅРєР°, РµСЃР»Рё Р±РѕР»СЊС€Рµ СЂРѕРґРёС‚РµР»СЏ
     }
     return root;
 }
 
 void centralPass(Tree* root, std::vector<int>& sortedArr) 
 {
-    if (root)   //если есть ветвь, т.е. не nullptr
+    if (root)   //РµСЃР»Рё РµСЃС‚СЊ РІРµС‚РІСЊ, С‚.Рµ. РЅРµ nullptr
     {
         centralPass(root->left, sortedArr);
         sortedArr.push_back(root->value);
@@ -56,7 +56,7 @@ std::vector<int> sortBST(std::vector<int>& arr)
 
 int main() 
 {
-    std::vector<int> arr = { 5, 3, 8, 6, 2, 7, 1, 4, 9};    //наше дерево, записанное в массив
+    std::vector<int> arr = { 5, 3, 8, 6, 2, 7, 1, 4, 9};    //РЅР°С€Рµ РґРµСЂРµРІРѕ, Р·Р°РїРёСЃР°РЅРЅРѕРµ РІ РјР°СЃСЃРёРІ
     std::vector<int> sortedArr = sortBST(arr);
     std::cout << "Sorted BST: \n";
     for (int value : sortedArr) {
